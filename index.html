@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeaseTrack</title>
+<meta name="description" content="Track mileage pace against your lease allowance.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚗</text></svg>">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="app-header">
+    <div class="brand">
+      <h1>LeaseTrack</h1>
+      <p class="tagline" id="vehicleTagline">Lease mileage tracker</p>
+    </div>
+    <button id="settingsBtn" class="btn btn-secondary" type="button">Settings</button>
+  </header>
+
+  <main>
+    <section id="emptyState" class="empty-state" hidden>
+      <h2>Set up your lease</h2>
+      <p>Enter your lease start date, term, and mileage allowance to start tracking your pace.</p>
+      <button id="emptyStateSettingsBtn" class="btn btn-primary" type="button">Get started</button>
+    </section>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="panel chart-panel">
+        <div class="panel-header">
+          <h2>Mileage pace</h2>
+          <div class="legend" id="chartLegend"></div>
+        </div>
+        <div class="chart-wrap" id="chartWrap"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Mileage log</h2>
+        </div>
+        <form id="entryForm" class="entry-form">
+          <label>
+            <span>Date</span>
+            <input type="date" id="entryDate" required>
+          </label>
+          <label>
+            <span>Odometer (mi)</span>
+            <input type="number" id="entryOdometer" min="0" step="1" required placeholder="e.g. 12450">
+          </label>
+          <button type="submit" class="btn btn-primary">Add reading</button>
+        </form>
+        <p class="field-error" id="entryError" hidden></p>
+        <div class="table-wrap">
+          <table class="log-table" id="logTable">
+            <thead>
+              <tr><th>Date</th><th>Odometer</th><th>Miles since last</th><th>Days since last</th><th>Daily rate</th><th class="col-actions"></th></tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+          <p class="empty-note" id="logEmptyNote" hidden>No readings yet — add your first odometer reading above.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <button id="exportBtn" class="btn-link" type="button">Export data</button>
+    <button id="importBtn" class="btn-link" type="button">Import data</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+    <button id="resetBtn" class="btn-link btn-danger" type="button">Reset all data</button>
+  </footer>
+</div>
+
+<dialog id="settingsDialog" class="settings-dialog">
+  <form id="settingsForm" method="dialog">
+    <h2>Lease settings</h2>
+    <label>
+      <span>Vehicle nickname (optional)</span>
+      <input type="text" id="vehicleName" placeholder="e.g. Honda CR-V">
+    </label>
+    <label>
+      <span>Lease start date</span>
+      <input type="date" id="startDate" required>
+    </label>
+    <label>
+      <span>Lease term (months)</span>
+      <input type="number" id="termMonths" min="1" step="1" required>
+    </label>
+    <label>
+      <span>Annual mileage allowance</span>
+      <input type="number" id="annualAllowance" min="0" step="1" required>
+    </label>
+    <label>
+      <span>Starting odometer (mi)</span>
+      <input type="number" id="startOdometer" min="0" step="1" required>
+    </label>
+    <label>
+      <span>Overage rate ($/mi, optional)</span>
+      <input type="number" id="overageRate" min="0" step="0.01" placeholder="e.g. 0.25">
+    </label>
+    <p class="field-error" id="settingsError" hidden></p>
+    <div class="dialog-actions">
+      <button type="button" id="cancelSettings" class="btn btn-secondary">Cancel</button>
+      <button type="submit" id="saveSettings" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
