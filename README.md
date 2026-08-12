@@ -60,6 +60,24 @@ server. Two ways to move it elsewhere, both under **Sync code** and
   This is the one to use before clearing browser data, or if you want every
   reading preserved when switching devices.
 
+## Installing on your iPhone
+
+LeaseTrack is a web app manifest, so Safari can add it to your home screen
+as a standalone app (its own icon, no address bar, no Safari chrome):
+
+1. Open the site in **Safari** (Chrome/other iOS browsers don't support this
+   the same way — they all use Apple's WebKit under the hood, but only
+   Safari exposes the Add to Home Screen action).
+2. Tap the **Share** icon, then **Add to Home Screen**.
+3. Launching it from the home screen icon opens it full-screen, with a
+   translucent status bar and its own `LeaseTrack` name and icon.
+
+Since data lives in `localStorage`, it's tied to *how* the page was
+opened — iOS has, at various points, kept the home-screen app's storage
+separate from Safari's for the same site. If your lease shows up empty in
+one but not the other, use a sync code (see "Sync code" above) to move it
+across rather than re-entering everything.
+
 ## Running locally
 
 No build step — serve the folder with any static file server, for example:
@@ -133,4 +151,7 @@ js/chart.js            SVG pace chart with hover tooltip
 js/sync.js             Bidirectional sync-code encode/decode (bit-packed + base64url)
 js/format.js           Number/date/currency formatting helpers
 js/app.js              Wires up the DOM, event handlers, rendering
+manifest.webmanifest   Web app manifest (name, icons, standalone display)
+icons/                 Home screen / favicon icons referenced by the manifest
+CNAME                  Custom domain for GitHub Pages (leasetrack.app)
 ```
