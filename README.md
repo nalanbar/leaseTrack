@@ -6,7 +6,9 @@ term length and annual allowance.
 
 No backend, no build step, no dependencies: it's static HTML/CSS/JS that
 stores your lease details and odometer readings in the browser's
-`localStorage`.
+`localStorage`. The background is a CSS mesh gradient (four blurred, slowly
+drifting color blobs, `prefers-reduced-motion`-aware) behind frosted-glass
+panels — no images, canvas, or JS animation involved.
 
 ## Features
 
