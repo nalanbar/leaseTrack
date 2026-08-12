@@ -230,6 +230,13 @@ body {
 .empty-state h2 { margin: 0 0 8px; }
 .empty-state p { color: var(--text-secondary); margin: 0 0 20px; }
 
+.empty-state-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .dashboard {
   display: flex;
   flex-direction: column;

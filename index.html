@@ -29,8 +29,12 @@
   <main>
     <section id="emptyState" class="empty-state" hidden>
       <h2>Set up your lease</h2>
-      <p>Enter your lease start date, term, and mileage allowance to start tracking your pace.</p>
-      <button id="emptyStateSettingsBtn" class="btn btn-primary" type="button">Get started</button>
+      <p>Enter your lease start date, term, and mileage allowance to start tracking your pace — or restore from a sync code or a JSON backup.</p>
+      <div class="empty-state-actions">
+        <button id="emptyStateSettingsBtn" class="btn btn-primary" type="button">Get started</button>
+        <button id="emptyStateSyncBtn" class="btn btn-secondary" type="button">Load a sync code</button>
+        <button id="emptyStateImportBtn" class="btn btn-secondary" type="button">Import JSON</button>
+      </div>
     </section>
 
     <section id="dashboard" class="dashboard" hidden>
@@ -137,6 +141,21 @@
     <div class="dialog-actions">
       <button type="button" id="cancelSettings" class="btn btn-secondary">Cancel</button>
       <button type="submit" id="saveSettings" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="loadSyncDialog" class="settings-dialog">
+  <form id="loadSyncForm" method="dialog">
+    <h2>Load a sync code</h2>
+    <label>
+      <span>Sync code</span>
+      <input type="text" id="loadSyncInput" class="sync-code-field" placeholder="Paste a sync code">
+    </label>
+    <p class="field-error" id="loadSyncError" hidden></p>
+    <div class="dialog-actions">
+      <button type="button" id="cancelLoadSync" class="btn btn-secondary">Cancel</button>
+      <button type="submit" class="btn btn-primary">Load</button>
     </div>
   </form>
 </dialog>
