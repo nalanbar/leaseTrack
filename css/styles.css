@@ -119,6 +119,18 @@ html, body {
 
 .btn-danger:hover { color: var(--status-critical); border-color: var(--status-critical); }
 
+.privacy-banner {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--series-1);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .empty-state {
   text-align: center;
   padding: 64px 24px;
@@ -133,6 +145,9 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+.dashboard[hidden] {
+  display: none;
 }
 
 /* Stat grid */
