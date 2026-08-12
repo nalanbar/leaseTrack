@@ -12,6 +12,10 @@ export function daysBetween(a, b) {
   return Math.round((toUTC(b) - toUTC(a)) / 86400000);
 }
 
+export function addDays(dateStr, days) {
+  return new Date(toUTC(dateStr).getTime() + days * 86400000).toISOString().slice(0, 10);
+}
+
 export function addMonths(dateStr, months) {
   const d = toUTC(dateStr);
   const result = new Date(Date.UTC(

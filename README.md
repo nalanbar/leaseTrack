@@ -27,8 +27,7 @@ stores your lease details and odometer readings in the browser's
   projected cost if that pace holds.
 - A pace chart plotting your actual mileage against a straight-line
   "allowed pace" reference, with a hover tooltip per reading.
-- A mileage log (date + odometer) you can add to, delete from, export as
-  JSON, and re-import.
+- A mileage log (date + odometer) you can add to and delete from.
 
 ## Using it
 
@@ -40,8 +39,21 @@ stores your lease details and odometer readings in the browser's
    most stats show `—` until you log your first one.
 
 All data stays in your browser (`localStorage`). Nothing is sent to a
-server. Use **Export data** to back it up or move it to another browser/
-device, and **Import data** to restore it.
+server. Two ways to move it elsewhere, both under **Sync code** and
+**Backup & data** near the bottom of the dashboard:
+
+- **Sync code** — a short, copy-pasteable code (usually 40–64 characters)
+  that carries your full lease config plus as many of your most recent
+  readings as fit in that length (shown next to the code, e.g. "your 6 most
+  recent readings of 15 total"). Meant for quickly moving to, or checking in
+  from, another browser or device — not a full history backup, since a
+  short code can't hold years of frequent readings. Paste one into the
+  **Load** field to apply it (this replaces your current lease and log, with
+  a confirmation first).
+- **Export/Import JSON**, under **Backup & data** — a complete, unlimited
+  backup of your lease and full mileage history as a downloadable file.
+  This is the one to use before clearing browser data, or if you want every
+  reading preserved when switching devices.
 
 ## Running locally
 
@@ -93,6 +105,7 @@ css/styles.css         All styling (light/dark aware)
 js/calculations.js     Pure lease/mileage math — no DOM access
 js/storage.js          localStorage load/save
 js/chart.js            SVG pace chart with hover tooltip
+js/sync.js             Bidirectional sync-code encode/decode (bit-packed + base64url)
 js/format.js           Number/date/currency formatting helpers
 js/app.js              Wires up the DOM, event handlers, rendering
 ```
