@@ -60,6 +60,24 @@ server. Two ways to move it elsewhere, both under **Sync code** and
   This is the one to use before clearing browser data, or if you want every
   reading preserved when switching devices.
 
+## Installing on your iPhone
+
+LeaseTrack is a web app manifest, so Safari can add it to your home screen
+as a standalone app (its own icon, no address bar, no Safari chrome):
+
+1. Open the site in **Safari** (Chrome/other iOS browsers don't support this
+   the same way — they all use Apple's WebKit under the hood, but only
+   Safari exposes the Add to Home Screen action).
+2. Tap the **Share** icon, then **Add to Home Screen**.
+3. Launching it from the home screen icon opens it full-screen, with a
+   translucent status bar and its own `LeaseTrack` name and icon.
+
+Since data lives in `localStorage`, it's tied to *how* the page was
+opened — iOS has, at various points, kept the home-screen app's storage
+separate from Safari's for the same site. If your lease shows up empty in
+one but not the other, use a sync code (see "Sync code" above) to move it
+across rather than re-entering everything.
+
 ## Running locally
 
 No build step — serve the folder with any static file server, for example:
@@ -80,6 +98,26 @@ push to `main`:
 3. Push to `main` (or re-run the "Deploy to GitHub Pages" workflow from the
    **Actions** tab) — the site will be published at
    `https://<your-username>.github.io/<repo-name>/`.
+
+### Custom domain (leasetrack.app)
+
+The `CNAME` file at the repo root points GitHub Pages at `leasetrack.app`.
+To finish wiring it up:
+
+1. At your domain registrar, add these DNS records for the apex domain:
+   - `A` records for `@` → `185.199.108.153`, `185.199.109.153`,
+     `185.199.110.153`, `185.199.111.153`
+   - (optional, IPv6) `AAAA` records for `@` → `2606:50c0:8000::153`,
+     `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`
+   - (optional, for `www.leasetrack.app`) `CNAME` record for `www` →
+     `<your-username>.github.io`
+2. In the repo's **Settings → Pages → Custom domain**, enter `leasetrack.app`
+   and save — this confirms the domain against the `CNAME` file and starts
+   certificate provisioning.
+3. Once DNS has propagated (usually minutes, can take longer) and GitHub
+   shows the domain as verified, check **Enforce HTTPS**. `.app` domains are
+   HSTS-preloaded, so browsers require HTTPS here from day one — the site
+   won't be reachable over plain HTTP even before this box is checked.
 
 ## Roadmap: pulling mileage from a vehicle API
 
@@ -113,4 +151,7 @@ js/chart.js            SVG pace chart with hover tooltip
 js/sync.js             Bidirectional sync-code encode/decode (bit-packed + base64url)
 js/format.js           Number/date/currency formatting helpers
 js/app.js              Wires up the DOM, event handlers, rendering
+manifest.webmanifest   Web app manifest (name, icons, standalone display)
+icons/                 Home screen / favicon icons referenced by the manifest
+CNAME                  Custom domain for GitHub Pages (leasetrack.app)
 ```

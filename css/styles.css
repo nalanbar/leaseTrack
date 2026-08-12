@@ -91,7 +91,14 @@ body {
 .app {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 20px 20px 64px;
+  /* max()/calc() with env() gracefully fall back to the plain value when
+     safe-area insets aren't supported. Matters in standalone iOS mode,
+     where apple-mobile-web-app-status-bar-style=black-translucent lets
+     content run under the notch/status bar unless padded explicitly. */
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-bottom: max(64px, calc(env(safe-area-inset-bottom) + 24px));
+  padding-left: max(20px, env(safe-area-inset-left));
 }
 
 /* Mesh gradient background — soft blurred blobs, fixed to the viewport
