@@ -81,6 +81,26 @@ push to `main`:
    **Actions** tab) — the site will be published at
    `https://<your-username>.github.io/<repo-name>/`.
 
+### Custom domain (leasetrack.app)
+
+The `CNAME` file at the repo root points GitHub Pages at `leasetrack.app`.
+To finish wiring it up:
+
+1. At your domain registrar, add these DNS records for the apex domain:
+   - `A` records for `@` → `185.199.108.153`, `185.199.109.153`,
+     `185.199.110.153`, `185.199.111.153`
+   - (optional, IPv6) `AAAA` records for `@` → `2606:50c0:8000::153`,
+     `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`
+   - (optional, for `www.leasetrack.app`) `CNAME` record for `www` →
+     `<your-username>.github.io`
+2. In the repo's **Settings → Pages → Custom domain**, enter `leasetrack.app`
+   and save — this confirms the domain against the `CNAME` file and starts
+   certificate provisioning.
+3. Once DNS has propagated (usually minutes, can take longer) and GitHub
+   shows the domain as verified, check **Enforce HTTPS**. `.app` domains are
+   HSTS-preloaded, so browsers require HTTPS here from day one — the site
+   won't be reachable over plain HTTP even before this box is checked.
+
 ## Roadmap: pulling mileage from a vehicle API
 
 Right now odometer readings are entered manually. Automatically pulling the
