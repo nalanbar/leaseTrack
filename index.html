@@ -62,14 +62,39 @@
           <p class="empty-note" id="logEmptyNote" hidden>No readings yet — add your first odometer reading above.</p>
         </div>
       </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Sync code</h2>
+        </div>
+        <p class="panel-note">A short code to move this lease to another browser or device — carries your lease details plus <span id="syncCapacity">your recent readings</span>. For a complete backup of your full history, use Export JSON below.</p>
+        <div class="sync-row">
+          <input type="text" id="syncCodeOutput" class="sync-code-field" readonly aria-label="Your sync code">
+          <button id="copySyncCodeBtn" class="btn btn-secondary" type="button">Copy</button>
+        </div>
+        <p class="sync-note" id="syncCopiedNote" hidden>Copied to clipboard.</p>
+        <div class="sync-row">
+          <input type="text" id="syncCodeInput" class="sync-code-field" placeholder="Paste a sync code to load it">
+          <button id="loadSyncCodeBtn" class="btn btn-primary" type="button">Load</button>
+        </div>
+        <p class="field-error" id="syncCodeError" hidden></p>
+      </div>
     </section>
   </main>
 
   <footer class="app-footer">
-    <button id="exportBtn" class="btn-link" type="button">Export data</button>
-    <button id="importBtn" class="btn-link" type="button">Import data</button>
-    <input type="file" id="importFile" accept="application/json" hidden>
-    <button id="resetBtn" class="btn-link btn-danger" type="button">Reset all data</button>
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Backup &amp; data</h2>
+      </div>
+      <p class="panel-note">Export downloads a complete JSON backup of your lease and full mileage history. Import restores from that file. This data lives only in this browser until you export it.</p>
+      <div class="data-actions">
+        <button id="exportBtn" class="btn btn-secondary" type="button">Export JSON</button>
+        <button id="importBtn" class="btn btn-secondary" type="button">Import JSON</button>
+        <input type="file" id="importFile" accept="application/json" hidden>
+        <button id="resetBtn" class="btn btn-secondary btn-danger" type="button">Reset all data</button>
+      </div>
+    </div>
   </footer>
 </div>
 

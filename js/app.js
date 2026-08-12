@@ -1,6 +1,7 @@
 import { loadState, saveState, defaultState, clearState, makeEntryId } from './storage.js';
 import { computeStats, todayISO, daysBetween } from './calculations.js';
 import { renderChart } from './chart.js';
+import { encodeSyncCode, decodeSyncCode } from './sync.js';
 import { formatMiles, formatSignedMiles, formatMilesPerDay, formatDate, formatCurrency, formatPercent } from './format.js';
 
 let state = loadState();
@@ -36,6 +37,14 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFile = document.getElementById('importFile');
 const resetBtn = document.getElementById('resetBtn');
+
+const syncCapacity = document.getElementById('syncCapacity');
+const syncCodeOutput = document.getElementById('syncCodeOutput');
+const copySyncCodeBtn = document.getElementById('copySyncCodeBtn');
+const syncCopiedNote = document.getElementById('syncCopiedNote');
+const syncCodeInput = document.getElementById('syncCodeInput');
+const loadSyncCodeBtn = document.getElementById('loadSyncCodeBtn');
+const syncCodeError = document.getElementById('syncCodeError');
 
 function persist() {
   saveState(state);
@@ -188,6 +197,47 @@ resetBtn.addEventListener('click', () => {
   if (!confirm('This permanently deletes your lease settings and mileage log from this browser. Continue?')) return;
   clearState();
   state = defaultState();
+  render();
+});
+
+function renderSyncCode() {
+  const { code, includedCount, totalCount } = encodeSyncCode(state.lease, state.entries);
+  syncCodeOutput.value = code;
+  if (totalCount === 0) {
+    syncCapacity.textContent = 'no readings yet';
+  } else if (includedCount === totalCount) {
+    syncCapacity.textContent = totalCount === 1 ? 'your 1 reading' : `all ${totalCount} of your readings`;
+  } else {
+    syncCapacity.textContent = `your ${includedCount} most recent readings (of ${totalCount} total)`;
+  }
+}
+
+copySyncCodeBtn.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(syncCodeOutput.value);
+  } catch {
+    syncCodeOutput.select();
+    document.execCommand('copy');
+  }
+  syncCopiedNote.hidden = false;
+  clearTimeout(copySyncCodeBtn._hideTimer);
+  copySyncCodeBtn._hideTimer = setTimeout(() => { syncCopiedNote.hidden = true; }, 2000);
+});
+
+loadSyncCodeBtn.addEventListener('click', () => {
+  syncCodeError.hidden = true;
+  let decoded;
+  try {
+    decoded = decodeSyncCode(syncCodeInput.value);
+  } catch (err) {
+    syncCodeError.textContent = err.message;
+    syncCodeError.hidden = false;
+    return;
+  }
+  if (!confirm('This replaces your current lease settings and mileage log with the ones from this code. Continue?')) return;
+  state = { lease: decoded.lease, entries: decoded.entries };
+  persist();
+  syncCodeInput.value = '';
   render();
 });
 
@@ -344,6 +394,7 @@ function render() {
   renderLegend();
   renderChart(chartWrap, { lease: state.lease, stats, entries: state.entries });
   renderLogTable();
+  renderSyncCode();
 }
 
 entryDateInput.value = todayISO();
