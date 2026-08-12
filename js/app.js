@@ -24,6 +24,8 @@ const settingsForm = document.getElementById('settingsForm');
 const settingsError = document.getElementById('settingsError');
 const settingsBtn = document.getElementById('settingsBtn');
 const emptyStateSettingsBtn = document.getElementById('emptyStateSettingsBtn');
+const emptyStateSyncBtn = document.getElementById('emptyStateSyncBtn');
+const emptyStateImportBtn = document.getElementById('emptyStateImportBtn');
 const cancelSettingsBtn = document.getElementById('cancelSettings');
 
 const vehicleNameInput = document.getElementById('vehicleName');
@@ -45,6 +47,12 @@ const syncCopiedNote = document.getElementById('syncCopiedNote');
 const syncCodeInput = document.getElementById('syncCodeInput');
 const loadSyncCodeBtn = document.getElementById('loadSyncCodeBtn');
 const syncCodeError = document.getElementById('syncCodeError');
+
+const loadSyncDialog = document.getElementById('loadSyncDialog');
+const loadSyncForm = document.getElementById('loadSyncForm');
+const loadSyncInput = document.getElementById('loadSyncInput');
+const loadSyncError = document.getElementById('loadSyncError');
+const cancelLoadSync = document.getElementById('cancelLoadSync');
 
 function persist() {
   saveState(state);
@@ -175,6 +183,7 @@ exportBtn.addEventListener('click', () => {
 });
 
 importBtn.addEventListener('click', () => importFile.click());
+emptyStateImportBtn.addEventListener('click', () => importFile.click());
 
 importFile.addEventListener('change', async () => {
   const file = importFile.files[0];
@@ -224,21 +233,55 @@ copySyncCodeBtn.addEventListener('click', async () => {
   copySyncCodeBtn._hideTimer = setTimeout(() => { syncCopiedNote.hidden = true; }, 2000);
 });
 
+/**
+ * Decodes and applies a sync code, replacing the current lease + log.
+ * Confirms first only if there's existing configured data to lose.
+ * Throws (with a user-facing message) if the code is invalid — callers
+ * are responsible for catching and displaying that.
+ * @returns {boolean} true if applied, false if the user cancelled.
+ */
+function applySyncCode(rawCode) {
+  const decoded = decodeSyncCode(rawCode);
+  if (state.lease.configured) {
+    const proceed = confirm('This replaces your current lease settings and mileage log with the ones from this code. Continue?');
+    if (!proceed) return false;
+  }
+  state = { lease: decoded.lease, entries: decoded.entries };
+  persist();
+  render();
+  return true;
+}
+
 loadSyncCodeBtn.addEventListener('click', () => {
   syncCodeError.hidden = true;
-  let decoded;
   try {
-    decoded = decodeSyncCode(syncCodeInput.value);
+    if (applySyncCode(syncCodeInput.value)) {
+      syncCodeInput.value = '';
+    }
   } catch (err) {
     syncCodeError.textContent = err.message;
     syncCodeError.hidden = false;
-    return;
   }
-  if (!confirm('This replaces your current lease settings and mileage log with the ones from this code. Continue?')) return;
-  state = { lease: decoded.lease, entries: decoded.entries };
-  persist();
-  syncCodeInput.value = '';
-  render();
+});
+
+emptyStateSyncBtn.addEventListener('click', () => {
+  loadSyncInput.value = '';
+  loadSyncError.hidden = true;
+  loadSyncDialog.showModal();
+});
+cancelLoadSync.addEventListener('click', () => loadSyncDialog.close());
+
+loadSyncForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  loadSyncError.hidden = true;
+  try {
+    if (applySyncCode(loadSyncInput.value)) {
+      loadSyncDialog.close();
+    }
+  } catch (err) {
+    loadSyncError.textContent = err.message;
+    loadSyncError.hidden = false;
+  }
 });
 
 function statTile({ label, value, sub, delta, deltaStatus, emphasis, meter }) {

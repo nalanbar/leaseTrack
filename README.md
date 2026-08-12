@@ -6,7 +6,9 @@ term length and annual allowance.
 
 No backend, no build step, no dependencies: it's static HTML/CSS/JS that
 stores your lease details and odometer readings in the browser's
-`localStorage`.
+`localStorage`. The background is a CSS mesh gradient (four blurred, slowly
+drifting color blobs, `prefers-reduced-motion`-aware) behind frosted-glass
+panels — no images, canvas, or JS animation involved.
 
 ## Features
 
@@ -31,9 +33,12 @@ stores your lease details and odometer readings in the browser's
 
 ## Using it
 
-1. Open the app and click **Get started** (or **Settings**) to enter your
-   lease start date, term length, annual mileage allowance, starting
-   odometer, and (optionally) a per-mile overage rate.
+1. Open the app. On the setup screen, either:
+   - click **Get started** (or **Settings** in the header) to enter your
+     lease start date, term length, annual mileage allowance, starting
+     odometer, and (optionally) a per-mile overage rate, or
+   - click **Load a sync code** or **Import JSON** to restore a lease you'd
+     already set up elsewhere, instead of entering it again.
 2. Add odometer readings as you go, via **Mileage log → Add reading**.
 3. The dashboard and chart update from those readings — no reading yet means
    most stats show `—` until you log your first one.
