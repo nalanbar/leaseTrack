@@ -317,7 +317,8 @@ function renderStatGrid(stats) {
     label: 'Miles / day — actual',
     value: formatMilesPerDay(stats.milesPerDayActual),
     sub: stats.hasData
-      ? `${formatMiles(stats.actualMiles)} mi over ${stats.daysElapsed} day${stats.daysElapsed === 1 ? '' : 's'}`
+      ? `${formatMiles(stats.actualMiles)} mi over ${stats.daysAsOfLatest} day${stats.daysAsOfLatest === 1 ? '' : 's'}`
+        + (stats.latestEntry.date !== stats.today ? ` (as of ${formatDate(stats.latestEntry.date)})` : '')
       : 'No odometer readings yet',
     delta: stats.milesPerDayActual != null
       ? `${stats.milesPerDayActual >= stats.milesPerDayAllowed ? '+' : ''}${(stats.milesPerDayActual - stats.milesPerDayAllowed).toFixed(1)} vs. allowed`

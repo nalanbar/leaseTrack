@@ -54,7 +54,15 @@ export function computeStats(lease, entries) {
   const hasData = !!latest;
   const actualMiles = hasData ? Math.max(0, latest.odometer - startOdometer) : 0;
 
-  const milesPerDayActual = (hasData && daysElapsed > 0) ? actualMiles / daysElapsed : null;
+  // Days the odometer data itself actually covers — i.e. as of your latest
+  // reading, not as of today. Using `daysElapsed` (today-based) here would
+  // silently assume zero miles were driven on any day since your last
+  // logged reading, understating your real pace whenever readings lag
+  // behind today, then producing a confusing jump once you catch up.
+  // Capped at daysElapsed as a safety bound against a future-dated entry.
+  const daysAsOfLatest = hasData ? Math.min(clamp(daysBetween(startDate, latest.date), 0, termDays), daysElapsed) : 0;
+
+  const milesPerDayActual = (hasData && daysAsOfLatest > 0) ? actualMiles / daysAsOfLatest : null;
 
   const milesRemaining = totalAllowed - actualMiles;
   const milesPerDayRemaining = (daysRemaining > 0) ? milesRemaining / daysRemaining : null;
@@ -100,6 +108,7 @@ export function computeStats(lease, entries) {
     hasData,
     latestEntry: latest,
     actualMiles,
+    daysAsOfLatest,
     milesPerDayActual,
     milesRemaining,
     milesPerDayRemaining,
