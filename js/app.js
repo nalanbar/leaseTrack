@@ -39,6 +39,7 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const importFile = document.getElementById('importFile');
 const resetBtn = document.getElementById('resetBtn');
+const refreshBtn = document.getElementById('refreshBtn');
 
 const syncCapacity = document.getElementById('syncCapacity');
 const syncCodeOutput = document.getElementById('syncCodeOutput');
@@ -207,6 +208,16 @@ resetBtn.addEventListener('click', () => {
   clearState();
   state = defaultState();
   render();
+});
+
+refreshBtn.addEventListener('click', () => {
+  // A plain reload can still be served from cache. Navigating to a URL
+  // with a new query string forces the browser to treat it as a fresh
+  // request instead — the fix for exactly the stale-install problem this
+  // button exists for (data itself is untouched; it's still in localStorage).
+  const url = new URL(location.href);
+  url.searchParams.set('_refresh', Date.now().toString());
+  location.href = url.toString();
 });
 
 function renderSyncCode() {
